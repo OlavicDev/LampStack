@@ -1,42 +1,42 @@
 ## WEB STACK IMPLEMENTATION (LAMP STACK) IN AWS
 
-### Introduction:
+### Intro:
 
-__The LAMP stack is a popular open-source web development platform that consists of four main components: Linux, Apache, MySQL, and PHP (or sometimes Perl or Python). This documentation outlines the setup, configuration, and usage of the LAMP stack.__
+__"LAMP" stands for Linux, Apache, MySQL, and PHP (or Perl, Python). It's a software stack used for building dynamic websites and web applications. Linux serves as the operating system, Apache as the web server, MySQL as the database system, and PHP (or Perl, Python) for server-side scripting.
+## Let dive into it  
+__
 
-## Step 0: Prerequisites
+## Step 1: Create an Ec2 Instance 
 
-__1.__ EC2 Instance of t2.micro type and Ubuntu 24.04 LTS (HVM) was lunched in the us-east-1 region using the AWS console.
+__1.__Create EC2 Instance of t2.micro type and Ubuntu OS image was lunched in the us-east-1 region using the AWS console.
 
-![Lunch Instance](./images/creating-ec2.png)
-![Lunch Instance](./images/ec2-details.png)
+![createEc2](https://github.com/OlavicDev/LampStack/assets/124717753/f09ad6ec-24d4-478c-b5c4-313f1a97367f)
+![ubuntu](https://github.com/OlavicDev/LampStack/assets/124717753/dd9d14fd-e29b-4fe9-9361-88d7a30e4948)
 
-__2.__ Created SSH key pair named __my-ec2-key__ to access the instance on port 22
 
-__3.__ The security group was configured with the following inbound rules:
+![create2](https://github.com/OlavicDev/LampStack/assets/124717753/84f8c9cf-89c8-486c-a182-0e2a1d8fd73b)
 
-- Allow traffic on port 80 (HTTP) with source from anywhere on the internet.
-- Allow traffic on port 443 (HTTPS) with source from anywhere on the internet.
-- Allow traffic on port 22 (SSH) with source from any IP address. This is opened by default.
 
-![Security Rules](./images/security-rule.png)
+__2.__ Created SSH key pair named __theghost__ to access the instance on port 22
+![keypair](https://github.com/OlavicDev/LampStack/assets/124717753/401e9e47-daca-4fd3-a7a8-19b9bc116a3f)
+
+
+__3.__ The security group was left default:
+
 
 __4.__ The default VPC and Subnet was used for the networking configuration.
 
-![Default Network](./images/networking.png)
+![security](https://github.com/OlavicDev/LampStack/assets/124717753/8d2741a9-668a-4cf6-b01a-fa2a92c1abd5)
+
 
 __5.__ The private ssh key that got downloaded was located, permission was changed for the private key file and then used to connect to the instance by running
 ```
-chmod 400 my-ec2-key.pem
+chmod 400 theghost.pem
 ```
 ```
-ssh -i "my-ec2-key.pem" ubuntu@184.72.210.143
+ssh -i theghost.pem ubuntu@54.205.214.77 
 ```
-Where __username=ubuntu__ and __public ip address=184.72.210.143__
-
-![Connect to instance](./images/ssh-access.png)
-
-
+![connectto](https://github.com/OlavicDev/LampStack/assets/124717753/9e8dcdbe-eacb-41d7-a0ee-04375deb9183)
 
 ## Step 1 - Install Apache and Update the Firewall
 
@@ -45,22 +45,22 @@ __1.__ __Update and upgrade list of packages in package manager__
 sudo apt update
 sudo apt upgrade -y
 ```
-![Update Packages](./images/update-ec2.png)
-![Upgrade Packages](./images/upgrade-ec2.png)
+![update1](https://github.com/OlavicDev/LampStack/assets/124717753/719ee76b-a28c-4d5e-83c5-2a51a9fa06f9)
 
 __2.__ __Run apache2 package installation__
 ```
 sudo apt install apache2 -y
 ```
-![Instal Apache](./images/install-apache.png)
+![apain](https://github.com/OlavicDev/LampStack/assets/124717753/5cd89a07-6068-4261-a679-32b977871ae8)
 
 __3.__ __Enable and verify that apache is running on as a service on the OS.__
 ```
 sudo systemctl enable apache2
 sudo systemctl status apache2
 ```
-If it green and running, then apache2 is correctly installed
-![Apache Status](./images/check-status.png)
+## This shows its correctly installed 
+![apachestatus](https://github.com/OlavicDev/LampStack/assets/124717753/191e8b9e-c76e-4367-856f-2c1a078b7d85)
+
 
 __4.__ __The server is running and can be accessed locally in the ubuntu shell by running the command below:__
 

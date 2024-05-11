@@ -2,7 +2,7 @@
 
 ### Intro:
 
-__"LAMP" stands for Linux, Apache, MySQL, and PHP (or Perl, Python). It's a software stack used for building dynamic websites and web applications. Linux serves as the operating system, Apache as the web server, MySQL as the database system, and PHP (or Perl, Python) for server-side scripting.
+__LAMP stands for Linux, Apache, MySQL, and PHP (or Perl, Python). It's a software stack used for building dynamic websites and web applications. Linux serves as the operating system, Apache as the web server, MySQL as the database system, and PHP (or Perl, Python) for server-side scripting.
 ## Let dive into it__
 
 ## Step 1: Create an Ec2 Instance 
@@ -101,13 +101,13 @@ __3.__ __Log in to mysql console__
 ```
 sudo mysql
 ```
-This connects to the MySQL server as the administrative database user __root__ infered by the use of __sudo__ when running the command.
+![sql login](https://github.com/OlavicDev/LampStack/assets/124717753/1089e827-8039-4f82-aecf-4125065396b4)
+
 
 __4.__ __Set a password for root user using mysql_native_password as default authentication method.__
-
-Here, the user's password was defined as "Admin123$"
+use a password you can remember 
 ```
-ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Admin123$';
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '*******';
 ```
 Exit the MySQL shell
 ```
@@ -116,17 +116,16 @@ exit
 
 __5.__ __Run an Interactive script to secure MySQL__
 
-The security script comes pre-installed with mysql. This script removes some insecure settings and lock down access to the database system.
 ```
 sudo mysql_secure_installation
 ```
-![](./images/secure-mysql.png)
+The security script comes pre-installed with mysql. This script removes some insecure settings and lock down access to the database system.
+![omo1](https://github.com/OlavicDev/LampStack/assets/124717753/6b06c56d-4f72-420e-8b52-1f725ae22975)
+![omo2](https://github.com/OlavicDev/LampStack/assets/124717753/6712d57d-ded9-4f88-b5e4-edfa59a7b294)
 
-Regardless of whether the VALIDATION PASSWORD PLUGIN is set up, the server will ask to select and confirm a password for MySQL root user.
 
 __6.__ __After changing root user password, log in to MySQL console.__
 
-A command prompt for password was noticed after running the command below.
 ```
 sudo mysql -p
 ```
@@ -141,24 +140,20 @@ exit
 __1.__ __Install php__
 Apache is installed to serve the content and MySQL is installed to store and manage data.
 PHP is the component of the set up that processes code to display dynamic content to the end user.
-
-The following were installed:
-- php package
-- php-mysql, a PHP module that allows PHP to communicate with MySQL-based databases.
-- libapache2-mod-php, to enable Apache to handle PHP files.
+let begin by installing PHP packages 
 ```
 sudo apt install php libapache2-mod-php php-mysql
 ```
-![Install PHP](./images/install-php.png)
+__All ready innstalled__ 
+![php install](https://github.com/OlavicDev/LampStack/assets/124717753/98b23c05-a41c-44ab-81f3-d5c08cef7769)
+
 
 Confirm the PHP version
 ```
 php -v
 ```
-![Confirm php version](./images/confirm-php-install.png)
 At this ponit, the LAMP stack is completely installed and fully operational.
 
-To tset the set up with a PHP script, it's best to set up a proper Apache Virtual Host to hold the website files and folders. Virtual host allows to have multiple websites located on a single machine and it won't be noticed by the website users.
 
 ## Step 4 - Create a virtual host for the website using Apache
 
@@ -169,18 +164,19 @@ Created the directory for projectlamp using "mkdir" command
 sudo mkdir /var/www/projectlamp
 ```
 
-__Assign the directory ownership with $USER environment variable which references the current system user.__
+__Change the ownnership of the directory.__
 ```
 sudo chown -R $USER:$USER /var/www/projectlamp
 ```
-![Projectlamp Root Directory](./images/create-root-directory.png)
+![change ownership](https://github.com/OlavicDev/LampStack/assets/124717753/a034e2f0-0c59-4e63-b9f2-8ac5bd5c3f24)
 
 __2.__ __Create and open a new configuration file in apache’s “sites-available” directory using vim.__
 ```
 sudo vim /etc/apache2/sites-available/projectlamp.conf
 ```
 
-Past in the bare-bones configuration below:
+Write the configuration below:
+by clicking I (for insert)
 ```
 <VirtualHost *:80>
   ServerName projectlamp
@@ -191,18 +187,17 @@ Past in the bare-bones configuration below:
   CustomLog ${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>
 ```
-![Virtual Host](./images/virtualhost.png)
+![write in vim1](https://github.com/OlavicDev/LampStack/assets/124717753/8ad380e5-3c15-41fa-8423-f06da7bacee2)
+
+__Save and Exit with "wq!"__
 
 
 __3.__ __Show the new file in sites-available__
 ```
 sudo ls /etc/apache2/sites-available
 ```
-```
-Output:
-000-default.conf default-ssl.conf projectlamp.conf
-```
-![Projectlamp config file](./images/ls-sites-available.png)
+![0000](https://github.com/OlavicDev/LampStack/assets/124717753/5881756e-325c-4bc9-a8c5-a8b54e49a4f8)
+
 
 With the VirtualHost configuration, Apache will serve projectlamp using /var/www/projectlamp as its web root directory.
 
@@ -210,61 +205,56 @@ __4.__ __Enable the new virtual host__
 ```
 sudo a2ensite projectlamp
 ```
-![Enable virtual host](./images/enable-root-directory.png)
+![assenite](https://github.com/OlavicDev/LampStack/assets/124717753/09cff30e-391a-4361-94bd-0105369d25c5)
 
 __5.__ __Disable apache’s default website.__
 
-This is because Apache’s default configuration will overwrite the virtual host if not disabled. This is required if a custom domain is not being used.
+To ensure that Apache’s default configuration will overwrite the virtual host. This is required if a custom domain is not being used.
 ```
 sudo a2dissite 000-default
 ```
-![Disable Apache default](./images/disable-root-dir.png)
 
 __6.__ __Ensure the configuration does not contain syntax error__
 
-The command below was used:
 ```
 sudo apache2ctl configtest
 ```
-![Check syntax error](./images/check-config-syntac.png)
-
+Output
+```
+Syntax Ok
+```
 __7.__ __Reload apache for changes to take effect.__
 ```
 sudo systemctl reload apache2
 ```
-![Reload Apache](./images/reload-apache.png)
+![reload](https://github.com/OlavicDev/LampStack/assets/124717753/2151b817-7e5c-4eb0-adee-0155411739a4)
+
 
 __8.__ __The new website is now active but the web root /var/www/projectlamp is still empty. Create an index.html file in this location so to test the virtual host work as expected.__
 ```
 sudo echo 'Hello LAMP from hostname' $(curl -s http://169.254.169.254/latest/meta-data/public-hostname) 'with public IP' $(curl -s http://169.254.169.254/latest/meta-data/public-ipv4) > /var/www/projectlamp/index.html
 ```
-![Root dir content](./images/fill-root-dir.png)
-
 
 __9.__ __Open the website on a browser using the public IP address.__
 ```
-http://184.72.210.143:80
+http://http://54.205.214.77/:80
 ```
-![URL public IP](./images/site-url-ip.png)
+![unauto](https://github.com/OlavicDev/LampStack/assets/124717753/94eca6db-d05b-430d-9776-7fdcd5dff740)
 
-__10.__ Open the website with public dns name (port is optional)
-```
-http://<public-DNS-name>:80
-```
-![URL public DNS](./images/site-url-pub-dns.png)
 
 This file can be left in place as a temporary landing page for the application until an index.php file is set up to replace it. Once this is done, the index.html file should be renamed or removed from the document root as it will take precedence over index.php file by default.
 
 ## Step 5 - Enable PHP on the website
 
-With the default DirectoryIndex setting on Apache, index.html file will always take precedence over index.php file. This is useful for setting up maintenance page in PHP applications, by creating a temporary index.html file containing an informative message for visitors. The index.html then becomes the landing page for the application. Once maintenance is over, the index.html is renamed or removed from the document root bringing back the regular application page.
-If the behaviour needs to be changed, /etc/apache2/mods-enabled/dir.conf file should be edited and the order in which the index.php file is listed within the DirectoryIndex directive should be changed.
+When Apache's default DirectoryIndex setting is in place, it prioritizes serving an index.html file over an index.php file. This feature proves valuable when configuring maintenance pages for PHP applications. By crafting a temporary index.html file containing pertinent information for visitors, it becomes the landing page during maintenance periods. Once maintenance concludes, simply rename or remove the index.html file from the document root to restore the regular application page.
+
+To modify this behavior, edit the /etc/apache2/mods-enabled/dir.conf file. Adjust the order in which the index.php file appears within the DirectoryIndex directive to reflect the desired precedence.
 
 __1.__ __Open the dir.conf file with vim to change the behaviour__
 ```
 sudo vim /etc/apache2/mods-enabled/dir.conf
 ```
-
+Input
 ```
 <IfModule mod_dir.c>
   # Change this:
@@ -273,8 +263,6 @@ sudo vim /etc/apache2/mods-enabled/dir.conf
   DirectoryIndex index.php index.html index.cgi index.pl index.xhtml index.htm
 </IfModule>
 ```
-![Change file list order](./images/index-php-config.png)
-
 
 __2.__ __Reload Apache__
 
@@ -282,8 +270,6 @@ Apache is reloaded so the changes takes effect.
 ```
 sudo systemctl reload apache2
 ```
-![](./images/reload-apache-2.png)
-
 __3.__ __Create a php test script to confirm that Apache is able to handle and process requests for PHP files.__
 
 A new index.php file was created inside the custom web root folder.
@@ -297,19 +283,24 @@ __Add the text below in the index.php file__
 <?php
 phpinfo();
 ```
-![php text](./images/index-php.png)
+![phpp](https://github.com/OlavicDev/LampStack/assets/124717753/490ea228-0ccb-4529-879d-10b96c5c9099)
 
+__4.__ __Refresh the Page__
 
-__4.__ __Now refresh the page__
+This page provides information about the server from the PHP perspective. It serves as a valuable tool for debugging and verifying that settings are applied correctly.
 
-![PHP page](./images/php-page.png)
-
-This page provides information about the server from the perspective of PHP. It is useful for debugging and to ensure the settings are being applied correctly.
-
-After checking the relevant information about the server through this page, It’s best to remove the file created as it contains sensitive information about the PHP environment and the ubuntu server. It can always be recreated if the information is needed later.
+Once you've reviewed the pertinent server information on this page, it's advisable to delete the created file, as it contains sensitive details about the PHP environment and the Ubuntu server.
 ```
 sudo rm /var/www/projectlamp/index.php
 ```
+This file can always be recreated if the information is needed at a later time.
+
+
+
+
+
+
+
 
 
 __Conclusion:__

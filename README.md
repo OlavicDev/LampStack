@@ -2,12 +2,12 @@
 
 ### Intro:
 
-__LAMP stands for Linux, Apache, MySQL, and PHP (or Perl, Python). It's a software stack used for building dynamic websites and web applications. Linux serves as the operating system, Apache as the web server, MySQL as the database system, and PHP (or Perl, Python) for server-side scripting.
-## Let dive into it__
+__LAMP stands for Linux, Apache, MySQL, and PHP (or Perl, Python). It's a software stack used for building dynamic websites and web applications. Linux serves as the operating system, Apache as the web server, MySQL as the database system, and PHP (or Perl, Python) for server-side scripting.__
+## Let dive into it
 
 ## Step 1: Create an Ec2 Instance 
 
-__1.__Create EC2 Instance of t2.micro type and Ubuntu OS image was lunched in the us-east-1 region using the AWS console.
+__1.__ Create EC2 Instance of t2.micro type and Ubuntu OS image was lunched in the us-east-1 region using the AWS console.
 
 ![createEc2](https://github.com/OlavicDev/LampStack/assets/124717753/f09ad6ec-24d4-478c-b5c4-313f1a97367f)
 ![ubuntu](https://github.com/OlavicDev/LampStack/assets/124717753/dd9d14fd-e29b-4fe9-9361-88d7a30e4948)
@@ -295,14 +295,5 @@ sudo rm /var/www/projectlamp/index.php
 ```
 This file can always be recreated if the information is needed at a later time.
 
-
-
-
-
-
-
-
-
-__Conclusion:__
-
-The LAMP stack provides a robust and flexible platform for developing and deploying web applications. By following the guidelines outlined in this documentation, It was possible to set up, configure, and maintain a LAMP environment effectively, enabling the creation of powerful and scalable web solutions.
+__Conclusion__
+Having a LAMP stack configured means you have a robust foundation for building and deploying various types of web projects. Linux provides a stable and secure operating system environment, Apache serves as a reliable web server, MySQL offers a powerful relational database management system, and PHP enables dynamic content generation.

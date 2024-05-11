@@ -1,10 +1,9 @@
-## WEB STACK IMPLEMENTATION (LAMP STACK) IN AWS
+### WEB STACK IMPLEMENTATION (LAMP STACK) IN AWS
 
 ### Intro:
 
 __"LAMP" stands for Linux, Apache, MySQL, and PHP (or Perl, Python). It's a software stack used for building dynamic websites and web applications. Linux serves as the operating system, Apache as the web server, MySQL as the database system, and PHP (or Perl, Python) for server-side scripting.
-## Let dive into it  
-__
+## Let dive into it__
 
 ## Step 1: Create an Ec2 Instance 
 
@@ -21,7 +20,9 @@ __2.__ Created SSH key pair named __theghost__ to access the instance on port 22
 ![keypair](https://github.com/OlavicDev/LampStack/assets/124717753/401e9e47-daca-4fd3-a7a8-19b9bc116a3f)
 
 
-__3.__ The security group was left default:
+__3.__ Added a new Inbound rule to allow traffic from HTTP port 80:
+
+![group](https://github.com/OlavicDev/LampStack/assets/124717753/edc2e3e8-e0ce-475b-b510-31ccb3c5a154)
 
 
 __4.__ The default VPC and Subnet was used for the networking configuration.
@@ -38,16 +39,16 @@ ssh -i theghost.pem ubuntu@54.205.214.77
 ```
 ![connectto](https://github.com/OlavicDev/LampStack/assets/124717753/9e8dcdbe-eacb-41d7-a0ee-04375deb9183)
 
-## Step 1 - Install Apache and Update the Firewall
+## Step 2 - Install Apache and Update the Firewall
 
-__1.__ __Update and upgrade list of packages in package manager__
+__1.__ __Update and upgrade the instance__
 ```
 sudo apt update
 sudo apt upgrade -y
 ```
 ![update1](https://github.com/OlavicDev/LampStack/assets/124717753/719ee76b-a28c-4d5e-83c5-2a51a9fa06f9)
 
-__2.__ __Run apache2 package installation__
+__2.__ __Install apache2 package__
 ```
 sudo apt install apache2 -y
 ```
@@ -69,53 +70,32 @@ curl http://localhost:80
 OR
 curl http://127.0.0.1:80
 ```
-![Local URL](./images/default-page-curl.png)
+![curl](https://github.com/OlavicDev/LampStack/assets/124717753/283d0932-d194-4145-9d8f-3d805d7db8be)
 
-__5.__ __Test with the public IP address if the Apache HTTP server can respond to request from the internet using the url on a browser.__
+
+__5.__ __Test with the public IP address if the Apache HTTP server is accessable over the internet (HTTP port :80)__
 ```
-http://184.72.210.143:80
+http://54.205.214.77:80
 ```
-![Apache Default Page](./images/default-page-browser.png)
+![apachepage](https://github.com/OlavicDev/LampStack/assets/124717753/99a37b44-492a-4c0c-9936-dfbf2304cfd9)
+
 This shows that the web server is correctly installed and it is accessible throuhg the firewall.
 
-__6.__ __Another way to retrieve the public ip address other than check the aws console__
-```
-curl -s http://169.254.169.254/latest/meta-data/public-ipv4
-```
-After running the command above, there was an error __401 - Unauthorized__ output.
-![Unauthorized Error-401](./images/unauthorized-curl.png)
-
-In troubleshooting this error, the following navigation was made from the ec2 instance page on the AWS console:
-
-- Actions > Instance Settings > Modify instance metadata options.
-- Then change the __IMDSv2__ from __Required__ to __Optional__.
-
-![imds option](./images/imds-option.png)
-
-The command was run again, this time there was no error with the public IP address displayed.
-
-```
-curl -s http://169.254.169.254/latest/meta-data/public-ipv4
-```
-![Public IP with curl](./images/pub-ip-curl.png)
 
 ## Step 2 - Install MySQL
-
+mywsql is well-known relational database 
 __1.__ __Install a relational database (RDB)__
-
-MySQL was installed in this project. It is a popular relational database management system used within PHP environments.
 ```
 sudo apt install mysql-server
 ```
-![Install MySQL](./images/install-mysql.png)
-When prompted, install was confirmed by typing y and then Enter.
+![mysql install](https://github.com/OlavicDev/LampStack/assets/124717753/7f2d9528-5e82-4ffe-92f4-b941fd1cddfa)
 
 __2.__ __Enable and verify that mysql is running with the commands below__
 ```
 sudo systemctl enable --now mysql
 sudo systemctl status mysql
 ```
-![MySQL Status](./images/check-mysql-status.png)
+![enable sql](https://github.com/OlavicDev/LampStack/assets/124717753/a1460166-4e68-492c-8480-e3c1d6d108bc)
 
 __3.__ __Log in to mysql console__
 ```
@@ -129,7 +109,6 @@ Here, the user's password was defined as "Admin123$"
 ```
 ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Admin123$';
 ```
-![User Password](./images/access-mysql-shell.png)
 Exit the MySQL shell
 ```
 exit
